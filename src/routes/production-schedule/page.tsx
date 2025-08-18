@@ -1,16 +1,16 @@
-import { Helmet } from "@modern-js/runtime/head";
-import { ConfigProvider, theme } from "antd";
-import ProductionSchedContainer from "../../components/ProductionSchedContainer";
-import "antd/dist/reset.css";
+import { Helmet } from '@modern-js/runtime/head';
+import { ConfigProvider, theme } from 'antd';
+import ProductionSchedContainer from '../../components/ProductionSchedContainer';
+import 'antd/dist/reset.css';
 
 const ProductionSchedulePage = () => (
   <ConfigProvider
     theme={{
       algorithm: theme.defaultAlgorithm,
       token: {
-        colorBgLayout: "#f5f5f5",
-        colorBgContainer: "#ffffff",
-        colorBgElevated: "#ffffff",
+        colorBgLayout: '#f5f5f5',
+        colorBgContainer: '#ffffff',
+        colorBgElevated: '#ffffff',
       },
     }}
   >

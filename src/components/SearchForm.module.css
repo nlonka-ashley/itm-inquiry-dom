@@ -85,7 +85,11 @@
   line-height: 1.4 !important;
 }
 
-.searchForm .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
+.searchForm
+  .ant-collapse-ghost
+  > .ant-collapse-item
+  > .ant-collapse-content
+  > .ant-collapse-content-box {
   padding: 16px 0 0 0;
 }
 
@@ -97,6 +101,10 @@
 }
 
 /* Dark theme support */
-[data-theme="dark"] .searchForm .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-header {
+[data-theme="dark"]
+  .searchForm
+  .ant-collapse-ghost
+  > .ant-collapse-item
+  > .ant-collapse-header {
   color: #1890ff;
 }

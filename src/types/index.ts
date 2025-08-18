@@ -23,7 +23,7 @@ export interface SearchFormData {
   vendorValue?: string;
   statusValue?: string;
   warehouseValue?: string;
-  reportType: "browser" | "excel" | "email";
+  reportType: 'browser' | 'excel' | 'email';
 }
 
 export interface POItemData {
@@ -53,7 +53,7 @@ export interface POItemData {
 }
 
 export interface ExportOptions {
-  type: "browser" | "excel" | "email";
+  type: 'browser' | 'excel' | 'email';
   title: string;
   description: string;
 }
@@ -65,7 +65,7 @@ export interface ApiDataService {
 }
 
 // Field types for the simplified dropdown system
-export type FieldType = "Buyno" | "pomVendorNum" | "Staic" | "Whse";
+export type FieldType = 'Buyno' | 'pomVendorNum' | 'Staic' | 'Whse';
 
 export interface FieldOption {
   value: FieldType;
@@ -124,26 +124,26 @@ export interface ProductionSchedProps {
 
 // Field types for Production Schedule filters
 export type ProductionSchedFieldType =
-  | "Item"
-  | "Vendor"
-  | "Warehouse"
-  | "DRP"
-  | "FC"
-  | "Office"
-  | "ProductionResource"
-  | "ItemClass";
+  | 'Item'
+  | 'Vendor'
+  | 'Warehouse'
+  | 'DRP'
+  | 'FC'
+  | 'Office'
+  | 'ProductionResource'
+  | 'ItemClass';
 
 // Logical operators for connecting filter rows
-export type LogicalOperator = "AND" | "OR";
+export type LogicalOperator = 'AND' | 'OR';
 
 // Comparison operators for filter conditions
 export type ComparisonOperator =
-  | "equals"
-  | "contains"
-  | "startsWith"
-  | "endsWith"
-  | "greaterThan"
-  | "lessThan";
+  | 'equals'
+  | 'contains'
+  | 'startsWith'
+  | 'endsWith'
+  | 'greaterThan'
+  | 'lessThan';
 
 // Individual filter row configuration
 export interface ProductionSchedFilterRow {
@@ -182,7 +182,7 @@ export interface ProductionSchedSearchFormData {
   orderTypeFilters: OrderTypeFilters;
   timePeriod: TimePeriodSelection;
   reportOptions: ReportOptions;
-  reportType: "browser" | "excel" | "email";
+  reportType: 'browser' | 'excel' | 'email';
 }
 
 // Production Schedule result data structure (matches API response)
@@ -324,7 +324,7 @@ export interface POsPaidSearchFormData {
   dateField?: string;
   dateFrom?: string;
   dateTo?: string;
-  reportType: "browser" | "excel" | "emailExcel";
+  reportType: 'browser' | 'excel' | 'emailExcel';
 }
 
 export interface POsPaidData {

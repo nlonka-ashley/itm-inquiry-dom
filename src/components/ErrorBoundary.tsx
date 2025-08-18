@@ -1,5 +1,5 @@
-import React from 'react';
 import { Alert, Button } from 'antd';
+import React from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -12,7 +12,10 @@ interface ErrorBoundaryProps {
   fallback?: React.ReactNode;
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -59,8 +62,8 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                   </pre>
                 </details>
               )}
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 onClick={this.handleReset}
                 style={{ marginTop: 16 }}
               >

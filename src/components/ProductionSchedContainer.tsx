@@ -1,35 +1,40 @@
-import React, { useState, useEffect } from "react";
 import {
-  Layout,
+  DownOutlined,
+  HomeOutlined,
+  SearchOutlined,
+  UpOutlined,
+} from '@ant-design/icons';
+import {
+  Breadcrumb,
+  Button,
   Card,
+  Divider,
+  Flex,
   Form,
+  Layout,
+  Switch,
   Typography,
   message,
-  Flex,
-  Button,
-  Switch,
-  Divider,
-  Breadcrumb
-} from "antd";
+} from 'antd';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import {
-  SearchOutlined,
-  HomeOutlined,
-  DownOutlined,
-  UpOutlined,
-} from "@ant-design/icons";
+  apiService,
+  debugProductionScheduleAPIs,
+  productionSchedApiService,
+} from '../services/apiService';
+import { ExcelExportService } from '../services/excelExportService';
 import type {
-  ProductionSchedProps,
-  ProductionSchedSearchFormData,
   FilterValue,
   ProductionSchedData,
-} from "../types";
-import { apiService, productionSchedApiService, debugProductionScheduleAPIs } from "../services/apiService";
-import { ExcelExportService } from "../services/excelExportService";
-import ProductionSchedSearchForm from "./ProductionSchedSearchForm";
-import ProductionSchedResultsTable from "./ProductionSchedResultsTable";
-import ExportOptions from "./ExportOptions";
-import ErrorBoundary from "./ErrorBoundary";
-import styles from "./ProductionSchedContainer.module.css";
+  ProductionSchedProps,
+  ProductionSchedSearchFormData,
+} from '../types';
+import ErrorBoundary from './ErrorBoundary';
+import ExportOptions from './ExportOptions';
+import styles from './ProductionSchedContainer.module.css';
+import ProductionSchedResultsTable from './ProductionSchedResultsTable';
+import ProductionSchedSearchForm from './ProductionSchedSearchForm';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -52,13 +57,15 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
 
   // Load initial data for all fixed filters
   useEffect(() => {
-    console.log("🔗 Using Production Schedule API service");
+    console.log('🔗 Using Production Schedule API service');
     loadAllFilterValues();
   }, []);
 
   const loadAllFilterValues = async () => {
     try {
-      console.log("🚀 Starting to load all Production Schedule filter values...");
+      console.log(
+        '🚀 Starting to load all Production Schedule filter values...',
+      );
 
       // Debug API responses to understand structure
       // await debugProductionScheduleAPIs();
@@ -75,13 +82,13 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
         fcValues,
         officeValues,
       ] = await Promise.all([
-        productionSchedApiService.getFilterValues("Vendor"),
-        productionSchedApiService.getFilterValues("Warehouse"),
-        productionSchedApiService.getFilterValues("ProductionResource"),
-        productionSchedApiService.getFilterValues("ItemClass"),
-        productionSchedApiService.getFilterValues("DRP"),
-        productionSchedApiService.getFilterValues("FC"),
-        productionSchedApiService.getFilterValues("Office"),
+        productionSchedApiService.getFilterValues('Vendor'),
+        productionSchedApiService.getFilterValues('Warehouse'),
+        productionSchedApiService.getFilterValues('ProductionResource'),
+        productionSchedApiService.getFilterValues('ItemClass'),
+        productionSchedApiService.getFilterValues('DRP'),
+        productionSchedApiService.getFilterValues('FC'),
+        productionSchedApiService.getFilterValues('Office'),
       ]);
 
       const newFilterValues: Record<string, FilterValue[]> = {
@@ -94,42 +101,69 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
         officeValue: officeValues,
       };
 
-      console.log("🎯 Setting Production Schedule filter values state:", newFilterValues);
+      console.log(
+        '🎯 Setting Production Schedule filter values state:',
+        newFilterValues,
+      );
 
       // Debug: Log each filter value array
       Object.keys(newFilterValues).forEach(key => {
-        console.log(`🔍 Filter ${key}:`, newFilterValues[key]?.length || 0, "items");
+        console.log(
+          `🔍 Filter ${key}:`,
+          newFilterValues[key]?.length || 0,
+          'items',
+        );
         if (newFilterValues[key]?.length > 0) {
           console.log(`🔍 First item in ${key}:`, newFilterValues[key][0]);
         }
       });
 
       setFilterValues(newFilterValues);
-      console.log("✅ All Production Schedule filter values loaded successfully from API");
+      console.log(
+        '✅ All Production Schedule filter values loaded successfully from API',
+      );
     } catch (error) {
-      console.error("❌ Error loading Production Schedule filter values:", error);
-      message.error("Failed to load filter values");
+      console.error(
+        '❌ Error loading Production Schedule filter values:',
+        error,
+      );
+      message.error('Failed to load filter values');
     }
   };
 
   const handleFieldChange = (fieldId: string, filterKey: string) => {
     // Since we're using fixed labels, we don't need to reload values
     // This function is kept for compatibility but doesn't need to do anything
-    console.log(`Production Schedule filter changed: ${fieldId} -> ${filterKey}`);
+    console.log(
+      `Production Schedule filter changed: ${fieldId} -> ${filterKey}`,
+    );
   };
 
   const handleSearch = async (values: ProductionSchedSearchFormData) => {
     setLoading(true);
     try {
-      console.log("🔍 ProductionSchedContainer - Starting search with real API service:", values);
+      console.log(
+        '🔍 ProductionSchedContainer - Starting search with real API service:',
+        values,
+      );
 
       // Use real API service for Production Schedule search
-      console.log("🔄 ProductionSchedContainer - Calling API service...");
-      const results = await productionSchedApiService.searchProductionSchedule(values);
+      console.log('🔄 ProductionSchedContainer - Calling API service...');
+      const results =
+        await productionSchedApiService.searchProductionSchedule(values);
 
-      console.log("✅ ProductionSchedContainer - Search results from API:", results);
-      console.log("✅ ProductionSchedContainer - Results type:", typeof results);
-      console.log("✅ ProductionSchedContainer - Results length:", Array.isArray(results) ? results.length : 'Not an array');
+      console.log(
+        '✅ ProductionSchedContainer - Search results from API:',
+        results,
+      );
+      console.log(
+        '✅ ProductionSchedContainer - Results type:',
+        typeof results,
+      );
+      console.log(
+        '✅ ProductionSchedContainer - Results length:',
+        Array.isArray(results) ? results.length : 'Not an array',
+      );
 
       setSearchResults(results);
       setCurrentSearchCriteria(values); // Store search criteria for export
@@ -139,10 +173,12 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
         setSearchPanelCollapsed(true);
       }
 
-      message.success(`Found ${Array.isArray(results) ? results.length : 0} production schedule items`);
+      message.success(
+        `Found ${Array.isArray(results) ? results.length : 0} production schedule items`,
+      );
     } catch (error) {
-      console.error("🚨 ProductionSchedContainer - Search error:", error);
-      message.error("Search failed. Please try again.");
+      console.error('🚨 ProductionSchedContainer - Search error:', error);
+      message.error('Search failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -151,36 +187,40 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
   const handleExport = async (exportType: string) => {
     try {
       switch (exportType) {
-        case "excel":
+        case 'excel': {
           if (searchResults.length === 0) {
             message.warning(
-              "No data to export. Please perform a search first."
+              'No data to export. Please perform a search first.',
             );
             return;
           }
 
           setExportLoading(true);
-          const hideLoading = message.loading("Generating CSV file...", 0);
+          const hideLoading = message.loading('Generating CSV file...', 0);
 
           try {
             // Simple CSV export for Production Schedule data
-            const csvContent = "data:text/csv;charset=utf-8,"
-              + "Order Number,Item Number,Description,Item Class,Vendor Number,Vendor Name,Warehouse,Production Resource,Week Number,Planned Qty,Firmed Qty,Shipped Qty,Replaceable Flag\n"
-              + searchResults.map(item =>
-                `${item.orderNum},"${item.itemNum}","${item.itemDesc}",${item.itemClass},${item.vendorNum},"${item.vendorName}",${item.whse},"${item.productionResource}",${item.wkNum},${item.pQty},${item.fQty},${item.sQty},${item.replaceableFlag}`
-              ).join("\n");
+            const csvContent = `data:text/csv;charset=utf-8,Order Number,Item Number,Description,Item Class,Vendor Number,Vendor Name,Warehouse,Production Resource,Week Number,Planned Qty,Firmed Qty,Shipped Qty,Replaceable Flag\n${searchResults
+              .map(
+                item =>
+                  `${item.orderNum},"${item.itemNum}","${item.itemDesc}",${item.itemClass},${item.vendorNum},"${item.vendorName}",${item.whse},"${item.productionResource}",${item.wkNum},${item.pQty},${item.fQty},${item.sQty},${item.replaceableFlag}`,
+              )
+              .join('\n')}`;
 
             const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `Production_Schedule_Export_${new Date().toISOString().split("T")[0]}.csv`);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute(
+              'download',
+              `Production_Schedule_Export_${new Date().toISOString().split('T')[0]}.csv`,
+            );
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
 
             hideLoading();
             message.success(
-              `CSV file downloaded successfully! (${searchResults.length} records)`
+              `CSV file downloaded successfully! (${searchResults.length} records)`,
             );
           } catch (exportError) {
             hideLoading();
@@ -189,9 +229,10 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
             setExportLoading(false);
           }
           break;
+        }
 
-        case "email":
-          message.info("Email functionality coming soon...");
+        case 'email':
+          message.info('Email functionality coming soon...');
           // Future implementation for email export
           break;
 
@@ -199,8 +240,8 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
           message.warning(`Export type "${exportType}" not implemented yet.`);
       }
     } catch (error) {
-      console.error("Export failed:", error);
-      message.error("Export failed. Please try again.");
+      console.error('Export failed:', error);
+      message.error('Export failed. Please try again.');
       setExportLoading(false);
     }
   };
@@ -230,7 +271,9 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
               <Flex align="center" gap="medium">
                 <Button
                   type="text"
-                  icon={searchPanelCollapsed ? <DownOutlined /> : <UpOutlined />}
+                  icon={
+                    searchPanelCollapsed ? <DownOutlined /> : <UpOutlined />
+                  }
                   onClick={() => setSearchPanelCollapsed(!searchPanelCollapsed)}
                   className={styles.collapseButton}
                 >
@@ -270,7 +313,12 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
         {searchResults.length > 0 && (
           <Card className={styles.resultsCard}>
             <div className={styles.resultsHeader}>
-              <Flex align="center" justify="space-between" wrap="wrap" gap="large">
+              <Flex
+                align="center"
+                justify="space-between"
+                wrap="wrap"
+                gap="large"
+              >
                 <Flex align="center" gap="small">
                   <Text strong className={styles.resultsTitle}>
                     Search Results
@@ -288,7 +336,10 @@ const ProductionSchedContainer: React.FC<ProductionSchedProps> = ({
               </Flex>
             </div>
             <Divider className={styles.resultsDivider} />
-            <ProductionSchedResultsTable data={searchResults} loading={loading} />
+            <ProductionSchedResultsTable
+              data={searchResults}
+              loading={loading}
+            />
           </Card>
         )}
       </Content>

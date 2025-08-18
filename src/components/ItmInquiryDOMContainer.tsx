@@ -1,41 +1,42 @@
-import React, { useState, useEffect } from "react";
 import {
-  Layout,
-  Card,
-  Form,
-  Typography,
-  message,
-  Flex,
-  Collapse,
+  CheckOutlined,
+  DownOutlined,
+  HomeOutlined,
+  SearchOutlined,
+  SettingOutlined,
+  UpOutlined,
+} from '@ant-design/icons';
+import {
   Breadcrumb,
-  Switch,
   Button,
-  Space,
+  Card,
+  Checkbox,
+  Collapse,
   Divider,
   Dropdown,
-  Checkbox,
-  Select
-} from "antd";
-import {
-  SearchOutlined,
-  HomeOutlined,
-  DownOutlined,
-  UpOutlined,
-  SettingOutlined,
-  CheckOutlined
-} from "@ant-design/icons";
+  Flex,
+  Form,
+  Layout,
+  Select,
+  Space,
+  Switch,
+  Typography,
+  message,
+} from 'antd';
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { apiService } from '../services/apiService';
+import { ExcelExportService } from '../services/excelExportService';
 import type {
-  ItmInquiryDOMProps,
-  SearchFormData,
   FilterValue,
+  ItmInquiryDOMProps,
   POItemData,
-} from "../types";
-import { apiService } from "../services/apiService";
-import { ExcelExportService } from "../services/excelExportService";
-import SearchForm from "./SearchForm";
-import ResultsTable from "./ResultsTable";
-import ExportOptions from "./ExportOptions";
-import styles from "./ItmInquiryDOMContainer.module.css";
+  SearchFormData,
+} from '../types';
+import ExportOptions from './ExportOptions';
+import styles from './ItmInquiryDOMContainer.module.css';
+import ResultsTable from './ResultsTable';
+import SearchForm from './SearchForm';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -55,7 +56,9 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
   >({});
   const [autoCollapseAfterSearch, setAutoCollapseAfterSearch] = useState(true);
   const [searchPanelCollapsed, setSearchPanelCollapsed] = useState(false);
-  const [currentView, setCurrentView] = useState<'standard' | 'detailed'>('standard');
+  const [currentView, setCurrentView] = useState<'standard' | 'detailed'>(
+    'standard',
+  );
 
   // Column management state
   const [selectedViewPreset, setSelectedViewPreset] = useState('Planning View');
@@ -71,17 +74,17 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
   // Load initial data for all fixed filters
   useEffect(() => {
     // Using real API service
-    console.log("🔗 Using real API service");
+    console.log('🔗 Using real API service');
 
     // Test API responses to debug the issue
     const testAPIs = async () => {
       try {
-        console.log("🧪 CONTAINER - Starting API tests...");
+        console.log('🧪 CONTAINER - Starting API tests...');
 
         // Test API responses
         await apiService.testAPIResponses();
       } catch (error) {
-        console.error("🚨 CONTAINER - Error testing APIs:", error);
+        console.error('🚨 CONTAINER - Error testing APIs:', error);
       }
     };
 
@@ -93,17 +96,17 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
 
   const loadAllFilterValues = async () => {
     try {
-      console.log("🚀 Starting to load all filter values...");
+      console.log('🚀 Starting to load all filter values...');
       // Load values for all fixed filter types
       const [buyerValues, vendorValues, statusValues, warehouseValues] =
         await Promise.all([
-          apiService.getFilterValues("Buyno"),
-          apiService.getFilterValues("pomVendorNum"),
-          apiService.getFilterValues("Staic"),
-          apiService.getFilterValues("Whse"),
+          apiService.getFilterValues('Buyno'),
+          apiService.getFilterValues('pomVendorNum'),
+          apiService.getFilterValues('Staic'),
+          apiService.getFilterValues('Whse'),
         ]);
 
-      console.log("📋 All filter values loaded:", {
+      console.log('📋 All filter values loaded:', {
         buyerValues,
         vendorValues,
         statusValues,
@@ -117,11 +120,11 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
         warehouseValue: warehouseValues,
       };
 
-      console.log("🎯 Setting filter values state:", newFilterValues);
+      console.log('🎯 Setting filter values state:', newFilterValues);
       setFilterValues(newFilterValues);
     } catch (error) {
-      console.error("❌ Error loading filter values:", error);
-      message.error("Failed to load filter values");
+      console.error('❌ Error loading filter values:', error);
+      message.error('Failed to load filter values');
     }
   };
 
@@ -145,7 +148,7 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
 
       message.success(`Found ${results.length} items`);
     } catch (error) {
-      message.error("Search failed");
+      message.error('Search failed');
     } finally {
       setLoading(false);
     }
@@ -154,28 +157,28 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
   const handleExport = async (exportType: string) => {
     try {
       switch (exportType) {
-        case "excel":
+        case 'excel': {
           if (searchResults.length === 0) {
             message.warning(
-              "No data to export. Please perform a search first."
+              'No data to export. Please perform a search first.',
             );
             return;
           }
 
           setExportLoading(true);
-          const hideLoading = message.loading("Generating Excel file...", 0);
+          const hideLoading = message.loading('Generating Excel file...', 0);
 
           try {
             // Use the enhanced export with search criteria
             ExcelExportService.exportWithCriteria(
               searchResults,
               currentSearchCriteria,
-              `PO_Items_Export_${new Date().toISOString().split("T")[0]}.xlsx`
+              `PO_Items_Export_${new Date().toISOString().split('T')[0]}.xlsx`,
             );
 
             hideLoading();
             message.success(
-              `Excel file downloaded successfully! (${searchResults.length} records)`
+              `Excel file downloaded successfully! (${searchResults.length} records)`,
             );
           } catch (exportError) {
             hideLoading();
@@ -184,9 +187,10 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
             setExportLoading(false);
           }
           break;
+        }
 
-        case "email":
-          message.info("Email functionality coming soon...");
+        case 'email':
+          message.info('Email functionality coming soon...');
           // Future implementation for email export
           break;
 
@@ -194,8 +198,8 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
           message.warning(`Export type "${exportType}" not implemented yet.`);
       }
     } catch (error) {
-      console.error("Export failed:", error);
-      message.error("Export failed. Please try again.");
+      console.error('Export failed:', error);
+      message.error('Export failed. Please try again.');
       setExportLoading(false);
     }
   };
@@ -229,7 +233,9 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
               <Flex align="center" gap="medium">
                 <Button
                   type="text"
-                  icon={searchPanelCollapsed ? <DownOutlined /> : <UpOutlined />}
+                  icon={
+                    searchPanelCollapsed ? <DownOutlined /> : <UpOutlined />
+                  }
                   onClick={() => setSearchPanelCollapsed(!searchPanelCollapsed)}
                   className={styles.collapseButton}
                 >
@@ -247,7 +253,6 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
                     Auto-collapse after search
                   </Text>
                 </Flex>
-
               </Flex>
             </Flex>
           </div>
@@ -270,7 +275,12 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
         {searchResults.length > 0 && (
           <Card className={styles.resultsCard}>
             <div className={styles.resultsHeader}>
-              <Flex align="center" justify="space-between" wrap="wrap" gap="large">
+              <Flex
+                align="center"
+                justify="space-between"
+                wrap="wrap"
+                gap="large"
+              >
                 <Flex align="center" gap="small">
                   <Text strong className={styles.resultsTitle}>
                     Search Results
@@ -305,9 +315,17 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
                         bordered={true}
                         bodyStyle={{ padding: '16px', minWidth: '280px' }}
                       >
-                        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+                        <Space
+                          direction="vertical"
+                          size="large"
+                          style={{ width: '100%' }}
+                        >
                           {/* View Presets Section */}
-                          <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                          <Space
+                            direction="vertical"
+                            size="small"
+                            style={{ width: '100%' }}
+                          >
                             <Text strong>View Presets</Text>
                             <Select
                               value={selectedViewPreset}
@@ -316,43 +334,67 @@ const ItmInquiryDOMContainer: React.FC<ItmInquiryDOMProps> = ({
                               suffixIcon={<CheckOutlined />}
                               style={{ width: '100%' }}
                             >
-                              <Select.Option value="Planning View">Planning View</Select.Option>
-                              <Select.Option value="Default View">Default View</Select.Option>
-                              <Select.Option value="Buyer View">Buyer View</Select.Option>
-                              <Select.Option value="Receiving View">Receiving View</Select.Option>
+                              <Select.Option value="Planning View">
+                                Planning View
+                              </Select.Option>
+                              <Select.Option value="Default View">
+                                Default View
+                              </Select.Option>
+                              <Select.Option value="Buyer View">
+                                Buyer View
+                              </Select.Option>
+                              <Select.Option value="Receiving View">
+                                Receiving View
+                              </Select.Option>
                             </Select>
                           </Space>
 
                           <Divider style={{ margin: '8px 0' }} />
 
                           {/* Optional Columns Section */}
-                          <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                          <Space
+                            direction="vertical"
+                            size="small"
+                            style={{ width: '100%' }}
+                          >
                             <Text strong>Optional Columns</Text>
                             <Checkbox.Group
                               style={{ width: '100%' }}
                               value={Object.entries(visibleColumns)
                                 .filter(([_, checked]) => checked)
-                                .map(([key, _]) => key)
-                              }
-                              onChange={(checkedValues) => {
+                                .map(([key, _]) => key)}
+                              onChange={checkedValues => {
                                 const newColumns = {
-                                  description: checkedValues.includes('description'),
+                                  description:
+                                    checkedValues.includes('description'),
                                   buyer: checkedValues.includes('buyer'),
                                   vendor: checkedValues.includes('vendor'),
-                                  orderDate: checkedValues.includes('orderDate'),
+                                  orderDate:
+                                    checkedValues.includes('orderDate'),
                                   shipDate: checkedValues.includes('shipDate'),
-                                  expectedDelivery: checkedValues.includes('expectedDelivery'),
+                                  expectedDelivery:
+                                    checkedValues.includes('expectedDelivery'),
                                 };
                                 setVisibleColumns(newColumns);
                               }}
                             >
-                              <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                                <Checkbox value="description">Description</Checkbox>
+                              <Space
+                                direction="vertical"
+                                size="small"
+                                style={{ width: '100%' }}
+                              >
+                                <Checkbox value="description">
+                                  Description
+                                </Checkbox>
                                 <Checkbox value="buyer">Buyer</Checkbox>
                                 <Checkbox value="vendor">Vendor</Checkbox>
-                                <Checkbox value="orderDate">Order Date</Checkbox>
+                                <Checkbox value="orderDate">
+                                  Order Date
+                                </Checkbox>
                                 <Checkbox value="shipDate">Ship Date</Checkbox>
-                                <Checkbox value="expectedDelivery">Expected Delivery</Checkbox>
+                                <Checkbox value="expectedDelivery">
+                                  Expected Delivery
+                                </Checkbox>
                               </Space>
                             </Checkbox.Group>
                           </Space>

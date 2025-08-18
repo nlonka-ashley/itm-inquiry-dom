@@ -1,14 +1,14 @@
-import React from "react";
-import { Button, Dropdown } from "antd";
 import {
   DownloadOutlined,
   FileExcelOutlined,
   MailOutlined,
-} from "@ant-design/icons";
-import type { MenuProps } from "antd";
+} from '@ant-design/icons';
+import { Button, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
+import type React from 'react';
 
 interface ExportOptionsProps {
-  onExport: (exportType: "excel" | "emailExcel") => void;
+  onExport: (exportType: 'excel' | 'emailExcel') => void;
   loading?: boolean;
   disabled?: boolean;
   style?: React.CSSProperties;
@@ -20,18 +20,18 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({
   disabled = false,
   style,
 }) => {
-  const exportMenuItems: MenuProps["items"] = [
+  const exportMenuItems: MenuProps['items'] = [
     {
-      key: "excel",
-      label: "Download Excel",
+      key: 'excel',
+      label: 'Download Excel',
       icon: <FileExcelOutlined />,
-      onClick: () => onExport("excel"),
+      onClick: () => onExport('excel'),
     },
     {
-      key: "email",
-      label: "Email Report",
+      key: 'email',
+      label: 'Email Report',
       icon: <MailOutlined />,
-      onClick: () => onExport("emailExcel"),
+      onClick: () => onExport('emailExcel'),
     },
   ];
 

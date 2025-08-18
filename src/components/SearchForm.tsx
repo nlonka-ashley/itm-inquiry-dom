@@ -1,17 +1,17 @@
-import React from "react";
+import { SearchOutlined } from '@ant-design/icons';
 import {
-  Form,
-  Input,
-  Select,
-  DatePicker,
   Button,
-  Row,
   Col,
   Collapse,
-} from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import type { FormInstance } from "antd/es/form";
-import type { SearchFormData, FilterValue } from "../types";
+  DatePicker,
+  Form,
+  Input,
+  Row,
+  Select,
+} from 'antd';
+import type { FormInstance } from 'antd/es/form';
+import type React from 'react';
+import type { FilterValue, SearchFormData } from '../types';
 
 interface SearchFormProps {
   form: FormInstance;
@@ -32,13 +32,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
     // Transform individual date fields to proper format
     const searchData: SearchFormData = {
       ...values,
-      dueDateFrom: values.dueDateFrom?.format("YYYY-MM-DD"),
-      dueDateTo: values.dueDateTo?.format("YYYY-MM-DD"),
-      reportType: values.reportType || "browser",
+      dueDateFrom: values.dueDateFrom?.format('YYYY-MM-DD'),
+      dueDateTo: values.dueDateTo?.format('YYYY-MM-DD'),
+      reportType: values.reportType || 'browser',
     };
 
-    console.log("🔍 SearchForm - Form values:", values);
-    console.log("🔍 SearchForm - Transformed search data:", searchData);
+    console.log('🔍 SearchForm - Form values:', values);
+    console.log('🔍 SearchForm - Transformed search data:', searchData);
 
     onSearch(searchData);
   };
@@ -48,19 +48,11 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={handleFinish}
-      size="small"
-    >
+    <Form form={form} layout="vertical" onFinish={handleFinish} size="small">
       {/* First Row - Item Number and Date Range */}
       <Row gutter={[24, 16]} justify="center">
         <Col xs={24} sm={16} md={10} lg={8}>
-          <Form.Item
-            label="Item Number"
-            name="itemNumber"
-          >
+          <Form.Item label="Item Number" name="itemNumber">
             <Input
               placeholder="Enter item number or description"
               allowClear
@@ -69,10 +61,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </Form.Item>
         </Col>
         <Col xs={24} sm={16} md={10} lg={8}>
-          <Form.Item
-            label="Due Date From"
-            name="dueDateFrom"
-          >
+          <Form.Item label="Due Date From" name="dueDateFrom">
             <DatePicker
               placeholder="Select start date"
               size="small"
@@ -83,10 +72,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </Form.Item>
         </Col>
         <Col xs={24} sm={16} md={10} lg={8}>
-          <Form.Item
-            label="Due Date To"
-            name="dueDateTo"
-          >
+          <Form.Item label="Due Date To" name="dueDateTo">
             <DatePicker
               placeholder="Select end date"
               size="small"
@@ -104,27 +90,26 @@ const SearchForm: React.FC<SearchFormProps> = ({
         size="small"
         items={[
           {
-            key: "advanced",
-            label: "Advanced Search Options",
+            key: 'advanced',
+            label: 'Advanced Search Options',
             children: (
               <>
                 {/* Single Row - 4 Columns: Buyer, Vendor, Warehouse, Status */}
                 <Row gutter={[16, 16]} justify="center">
                   <Col xs={24} sm={12} md={6} lg={6}>
-                    <Form.Item
-                      label="Buyer"
-                      name="buyer"
-                    >
+                    <Form.Item label="Buyer" name="buyer">
                       <Select
                         placeholder="Select buyer"
                         allowClear
                         showSearch
                         size="small"
                         optionFilterProp="children"
-
                       >
-                        {(filterValues.buyerValue || []).map((value) => (
-                          <Select.Option key={value.filterId} value={value.filterId}>
+                        {(filterValues.buyerValue || []).map(value => (
+                          <Select.Option
+                            key={value.filterId}
+                            value={value.filterId}
+                          >
                             {value.filterDesc
                               ? `${value.filterDesc} (${value.filterId})`
                               : `None (${value.filterId})`}
@@ -134,20 +119,19 @@ const SearchForm: React.FC<SearchFormProps> = ({
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={12} md={6} lg={6}>
-                    <Form.Item
-                      label="Vendor"
-                      name="vendor"
-                    >
+                    <Form.Item label="Vendor" name="vendor">
                       <Select
                         placeholder="Select vendor"
                         allowClear
                         showSearch
                         size="small"
                         optionFilterProp="children"
-
                       >
-                        {(filterValues.vendorValue || []).map((value) => (
-                          <Select.Option key={value.filterId} value={value.filterId}>
+                        {(filterValues.vendorValue || []).map(value => (
+                          <Select.Option
+                            key={value.filterId}
+                            value={value.filterId}
+                          >
                             {value.filterDesc
                               ? `${value.filterDesc} (${value.filterId})`
                               : `None (${value.filterId})`}
@@ -157,20 +141,19 @@ const SearchForm: React.FC<SearchFormProps> = ({
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={12} md={6} lg={6}>
-                    <Form.Item
-                      label="Warehouse"
-                      name="warehouse"
-                    >
+                    <Form.Item label="Warehouse" name="warehouse">
                       <Select
                         placeholder="Select warehouse"
                         allowClear
                         showSearch
                         size="small"
                         optionFilterProp="children"
-
                       >
-                        {(filterValues.warehouseValue || []).map((value) => (
-                          <Select.Option key={value.filterId} value={value.filterId}>
+                        {(filterValues.warehouseValue || []).map(value => (
+                          <Select.Option
+                            key={value.filterId}
+                            value={value.filterId}
+                          >
                             {value.filterDesc
                               ? `${value.filterDesc} (${value.filterId})`
                               : `None (${value.filterId})`}
@@ -180,10 +163,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
                     </Form.Item>
                   </Col>
                   <Col xs={24} sm={12} md={6} lg={6}>
-                    <Form.Item
-                      label="Status (Multi-select)"
-                      name="status"
-                    >
+                    <Form.Item label="Status (Multi-select)" name="status">
                       <Select
                         mode="multiple"
                         placeholder="Select status"
@@ -192,12 +172,17 @@ const SearchForm: React.FC<SearchFormProps> = ({
                         size="small"
                         optionFilterProp="children"
                         maxTagCount="responsive"
-
                       >
-                        <Select.Option value="05">05 - Cfm Required</Select.Option>
+                        <Select.Option value="05">
+                          05 - Cfm Required
+                        </Select.Option>
                         <Select.Option value="10">10 - On Order</Select.Option>
-                        <Select.Option value="20">20 - In Transit</Select.Option>
-                        <Select.Option value="30">30 - Rc to Inspect</Select.Option>
+                        <Select.Option value="20">
+                          20 - In Transit
+                        </Select.Option>
+                        <Select.Option value="30">
+                          30 - Rc to Inspect
+                        </Select.Option>
                       </Select>
                     </Form.Item>
                   </Col>
