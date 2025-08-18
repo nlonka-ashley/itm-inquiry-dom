@@ -1,0 +1,243 @@
+/* Production Schedule Container Layout Styles */
+
+/* Main Layout */
+.mainLayout {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+
+
+/* Content Styles */
+.content {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Breadcrumb Styles */
+.breadcrumbContainer {
+  margin-bottom: 16px;
+}
+
+/* Search Card Styles */
+.searchCard {
+  margin: 16px auto;
+  max-width: 1240px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.searchHeader {
+  padding: 16px 0 0 0;
+}
+
+.collapseButton {
+  font-weight: 500 !important;
+  color: #1890ff !important;
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.collapseButton:hover {
+  color: #40a9ff !important;
+}
+
+.switchLabel {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.searchDivider {
+  margin: 16px 0;
+}
+
+/* Results Card Styles */
+.resultsCard {
+  margin: 16px auto;
+  max-width: 1240px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.resultsHeader {
+  padding: 16px 0 0 0;
+}
+
+.resultsTitle {
+  font-size: 16px;
+  color: #262626;
+}
+
+.resultsCount {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.resultsDivider {
+  margin: 16px 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
+  }
+
+  .searchCard {
+    padding: 16px;
+    margin: 16px;
+  }
+
+  .resultsCard {
+    margin: 16px;
+  }
+
+  .breadcrumbContainer {
+    padding: 8px 16px;
+  }
+
+
+
+  .resultsTitle {
+    font-size: 14px;
+  }
+
+
+}
+
+/* Header typography styling */
+.antTypographyTitleWhite {
+  color: var(--ant-color-white) !important;
+  margin: 0 !important;
+}
+
+.antTypographyTextWhiteSecondary {
+  color: var(--ant-color-white-secondary) !important;
+}
+
+/* Layout content styling */
+.antLayoutContentBg {
+  background-color: var(--ant-color-bg-layout);
+  padding: var(--ant-padding-lg);
+  min-height: 100vh;
+}
+
+/* Container styling for Collapse component (Search Criteria) */
+.antCollapseContainer {
+  width: 100%;
+  max-width: 1400px;
+  background-color: #ffffff;
+  box-shadow: var(--ant-box-shadow-sm);
+  border-radius: var(--ant-border-radius);
+  border: 1px solid var(--ant-color-border);
+  margin-bottom: var(--ant-margin-lg);
+}
+
+/* Search criteria panel specific styling */
+.antCollapseContainer .ant-collapse-content-box {
+  background-color: #ffffff;
+  padding: var(--ant-padding-lg);
+  border-radius: 0 0 var(--ant-border-radius) var(--ant-border-radius);
+}
+
+/* Search criteria header styling */
+.antCollapseContainer .ant-collapse-header {
+  background-color: #ffffff;
+  border-radius: var(--ant-border-radius) var(--ant-border-radius) 0 0;
+  font-weight: var(--ant-font-weight-strong);
+  border-bottom: 1px solid var(--ant-color-border);
+}
+
+/* Container styling for Card component (Search Results) */
+.antCardContainer {
+  width: 100%;
+  max-width: 1400px;
+  background-color: #ffffff;
+  box-shadow: var(--ant-box-shadow);
+  border-radius: var(--ant-border-radius);
+  border: 1px solid var(--ant-color-border);
+  margin-top: var(--ant-margin-lg);
+}
+
+/* Search results card header styling */
+.antCardContainer .ant-card-head {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--ant-color-border);
+  border-radius: var(--ant-border-radius) var(--ant-border-radius) 0 0;
+  font-weight: var(--ant-font-weight-strong);
+}
+
+/* Search results card body styling */
+.antCardContainer .ant-card-body {
+  background-color: #ffffff;
+  padding: var(--ant-padding-md);
+  border-radius: 0 0 var(--ant-border-radius) var(--ant-border-radius);
+}
+
+/* Search results table styling */
+.antCardContainer .ant-table-wrapper {
+  background-color: #ffffff;
+  border-radius: var(--ant-border-radius-sm);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .antLayoutContentBg {
+    padding: var(--ant-padding-md);
+  }
+
+  .antCollapseContainer,
+  .antCardContainer {
+    max-width: 100%;
+    margin: 0 var(--ant-margin-xs);
+  }
+
+  .antCollapseContainer .ant-collapse-content-box,
+  .antCardContainer .ant-card-body {
+    padding: var(--ant-padding-sm);
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .antTypographyTitleWhite {
+  color: var(--ant-color-text-heading) !important;
+}
+
+[data-theme="dark"] .antTypographyTextWhiteSecondary {
+  color: var(--ant-color-text-secondary) !important;
+}
+
+/* Dark theme container backgrounds */
+[data-theme="dark"] .antCollapseContainer {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border-secondary);
+}
+
+[data-theme="dark"] .antCollapseContainer .ant-collapse-header {
+  background-color: var(--ant-color-bg-container);
+  border-bottom-color: var(--ant-color-border-secondary);
+}
+
+[data-theme="dark"] .antCollapseContainer .ant-collapse-content-box {
+  background-color: var(--ant-color-bg-container);
+}
+
+[data-theme="dark"] .antCardContainer {
+  background-color: var(--ant-color-bg-container);
+  border-color: var(--ant-color-border-secondary);
+}
+
+[data-theme="dark"] .antCardContainer .ant-card-head {
+  background-color: var(--ant-color-bg-container);
+  border-bottom-color: var(--ant-color-border-secondary);
+}
+
+[data-theme="dark"] .antCardContainer .ant-card-body {
+  background-color: var(--ant-color-bg-container);
+}
+
+[data-theme="dark"] .antCardContainer .ant-table-wrapper {
+  background-color: var(--ant-color-bg-container);
+}

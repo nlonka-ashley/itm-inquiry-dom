@@ -1,0 +1,102 @@
+/* Search Form Styles */
+
+.searchForm {
+  padding: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 11px !important;
+}
+
+.searchForm .ant-form-item-label > label {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.searchForm .ant-input {
+  font-size: 11px !important;
+  height: 28px !important;
+}
+
+.searchForm .ant-input::placeholder {
+  font-size: 11px !important;
+}
+
+.searchForm .ant-select .ant-select-selector {
+  font-size: 11px !important;
+  min-height: 28px !important;
+}
+
+.searchForm .ant-select .ant-select-selection-item {
+  font-size: 11px !important;
+  line-height: 26px !important;
+}
+
+.searchForm .ant-select .ant-select-selection-placeholder {
+  font-size: 11px !important;
+}
+
+/* Match Select input width to form input width */
+.searchForm .ant-select-selection-search-input {
+  width: 100% !important;
+}
+
+.searchForm .ant-form-item-control-input-content,
+.searchForm .ant-select {
+  width: 100% !important;
+}
+
+.searchForm .ant-picker {
+  font-size: 11px !important;
+  height: 28px !important;
+}
+
+.searchForm .ant-picker input {
+  font-size: 11px !important;
+}
+
+.searchForm .ant-btn {
+  font-size: 11px !important;
+  height: 28px !important;
+  padding: 4px 12px !important;
+}
+
+.formItem {
+  margin-bottom: 12px;
+}
+
+.formItem:last-child {
+  margin-bottom: 0;
+}
+
+.searchForm .ant-form-item {
+  margin-bottom: 12px;
+}
+
+.searchForm .ant-form-item-label {
+  padding-bottom: 2px;
+}
+
+/* Advanced Search Options */
+.searchForm .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-header {
+  padding: 6px 0 !important;
+  font-size: 11px !important;
+  color: #1890ff !important;
+  line-height: 1.4 !important;
+}
+
+.searchForm .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
+  padding: 16px 0 0 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .formItem {
+    margin-bottom: 12px;
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .searchForm .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-header {
+  color: #1890ff;
+}

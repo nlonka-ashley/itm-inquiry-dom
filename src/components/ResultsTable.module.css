@@ -1,0 +1,142 @@
+/* Ant Design compatible styling for ResultsTable */
+
+/* Resizable column header styling */
+.resizableHeader {
+  position: relative;
+}
+
+/* Resize handle styling */
+.resizeHandle {
+  position: absolute;
+  right: -5px;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: col-resize;
+  background: transparent;
+  border: none;
+  z-index: 1;
+}
+
+.resizeHandle:hover {
+  background-color: var(--ant-color-primary-hover);
+  opacity: 0.3;
+}
+
+/* Column header text styling */
+.columnHeaderText {
+  text-align: center;
+  display: block;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+  font-weight: var(--ant-font-weight-strong);
+}
+
+/* Table container styling */
+.tableContainer {
+  width: 100%;
+}
+
+/* Status tag truncation without ellipsis */
+.statusTagTruncated {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .columnHeaderText {
+    font-size: var(--ant-font-size-sm);
+    line-height: 1.1;
+  }
+
+  .resizeHandle {
+    width: 8px;
+    right: -4px;
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .resizeHandle:hover {
+  background-color: var(--ant-color-primary);
+}
+
+[data-theme="dark"] .columnHeaderText {
+  color: var(--ant-color-text-heading);
+}
+
+/* Production Schedule specific styling */
+.productionSchedTable {
+  font-size: 12px;
+}
+
+.productionSchedTable .ant-table-tbody > tr > td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+
+.productionSchedTable .ant-table-thead > tr > th {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 11px;
+}
+
+/* Merged cell styling */
+.productionSchedTable .ant-table-tbody > tr > td[rowspan] {
+  border-right: 2px solid #d9d9d9;
+  background-color: #fafafa;
+  font-weight: bold;
+}
+
+/* Row styling for different order types */
+.firmedRow {
+  background-color: #d4edda !important;
+}
+
+.firmedRow:hover {
+  background-color: #c3e6cb !important;
+}
+
+.shippedRow {
+  background-color: #fff3cd !important;
+}
+
+.shippedRow:hover {
+  background-color: #ffeaa7 !important;
+}
+
+.plannedRow {
+  background-color: #cce7ff !important;
+}
+
+.plannedRow:hover {
+  background-color: #b3d9ff !important;
+}
+
+/* Dark theme support for row styling */
+[data-theme="dark"] .firmedRow {
+  background-color: #1f4e2a !important;
+}
+
+[data-theme="dark"] .firmedRow:hover {
+  background-color: #2d5a35 !important;
+}
+
+[data-theme="dark"] .shippedRow {
+  background-color: #4a3c1a !important;
+}
+
+[data-theme="dark"] .shippedRow:hover {
+  background-color: #5a4620 !important;
+}
+
+[data-theme="dark"] .plannedRow {
+  background-color: #1a3a5c !important;
+}
+
+[data-theme="dark"] .plannedRow:hover {
+  background-color: #204466 !important;
+}

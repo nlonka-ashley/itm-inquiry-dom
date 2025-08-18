@@ -1,0 +1,93 @@
+/* Production Schedule Search Form Styles */
+
+.sectionCard {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sectionCard .ant-card-head {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.sectionCard .ant-card-head-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.filterRowCard {
+  margin-bottom: 8px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.filterRowCard:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.1);
+}
+
+.filterRowCard .ant-card-body {
+  padding: 12px;
+}
+
+.formItem {
+  margin-bottom: 0;
+}
+
+.labelContainer {
+  height: 32px;
+  padding: 0 8px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sectionCard {
+    margin-bottom: 12px;
+  }
+  
+  .filterRowCard .ant-card-body {
+    padding: 8px;
+  }
+}
+
+/* Custom button styles */
+.ant-btn-dashed {
+  border-style: dashed;
+  border-color: #d9d9d9;
+  color: #666;
+}
+
+.ant-btn-dashed:hover {
+  border-color: #1890ff;
+  color: #1890ff;
+}
+
+/* Form section spacing */
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.ant-card + .ant-card {
+  margin-top: 16px;
+}
+
+/* Checkbox styling */
+.ant-checkbox-wrapper {
+  font-weight: 500;
+}
+
+/* Select and Input consistent sizing */
+.ant-select-small,
+.ant-input-small {
+  height: 28px;
+}
+
+/* Action buttons container */
+.ant-btn-group {
+  margin-top: 24px;
+}
