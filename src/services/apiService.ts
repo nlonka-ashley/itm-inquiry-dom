@@ -50,7 +50,7 @@ const API_CONFIG = {
   PRODUCTION_VENDORS_API_URL: '/api/v1/inquiry-common/vendors',
 
   // POs Paid API URLs
-  POS_PAID_API_URL: (env: string) => `/api/POsPaid/${env}/search`,
+  POS_PAID_API_URL: (env: string) => `/api/po-paid-inquiry/${env}/search`,
   POS_PAID_STATUSES_API_URL: '/api/v1/inquiry-common/po-statuses',
 };
 
@@ -861,11 +861,11 @@ export class ApiService {
           break;
         }
         case 'pomVendorNum': {
-          console.log('🔄 Fetching vendors data...');
-          const vendors = await fetchVendors();
-          console.log('📊 Raw vendors data:', vendors);
-          filterValues = convertVendorsToFilterValues(vendors);
-          console.log('✅ Converted vendors to filter values:', filterValues);
+          console.log('🔄 Fetching production vendors data for POs Paid...');
+          const productionVendors = await fetchProductionVendors();
+          console.log('📊 Raw production vendors data:', productionVendors);
+          filterValues = productionVendors; // fetchProductionVendors already returns FilterValue[]
+          console.log('✅ Production vendors ready for POs Paid:', filterValues);
           break;
         }
         case 'Staic': {
@@ -1052,6 +1052,115 @@ export class ApiService {
 
       // Generic error
       throw new Error('Search failed. Please try again.');
+    }
+  }
+
+  // ============================================================================
+  // POs Paid API Methods
+  // ============================================================================
+
+  /**
+   * Search POs Paid data
+   * @param searchData Search criteria
+   * @returns Promise<POsPaidData[]>
+   */
+  static async searchPOsPaid(
+    searchData: POsPaidSearchFormData,
+  ): Promise<POsPaidData[]> {
+    try {
+      console.log(
+        '🔍 POsPaidApiService - Searching with criteria:',
+        searchData,
+      );
+
+      const request: POsPaidRequest = {
+        itemNum: searchData.itemNumber, // Map itemNumber -> itemNum
+        warehouse: searchData.warehouse || '',
+        status: searchData.status || '',
+        vendor: searchData.vendor || '',
+        dateField: Number.parseInt(searchData.dateField || '-1'),
+        fromDate: searchData.dateFrom || '', // Map dateFrom -> fromDate
+        toDate: searchData.dateTo || '', // Map dateTo -> toDate
+        vhsName: 'MASTERYY', // Default VHS name
+        user: 'system', // Default user
+        app: 'POsPaidInq.asp', // Application name
+      };
+
+      const response = await fetchAPI<POsPaidResponse>(
+        API_CONFIG.POS_PAID_API_URL('afi'),
+        {
+          method: 'POST',
+          data: request,
+        },
+      );
+
+      console.log('✅ POsPaidApiService - Search successful:', response);
+      return response.data || [];
+    } catch (error) {
+      console.error('❌ POsPaidApiService - Search failed:', error);
+      throw new Error('Failed to search POs Paid data');
+    }
+  }
+
+  /**
+   * Get PO statuses for POs Paid inquiry
+   * @returns Promise<StatusOption[]>
+   */
+  static async getPOStatuses(): Promise<StatusOption[]> {
+    try {
+      console.log('🔍 POsPaidApiService - Fetching PO statuses...');
+
+      const data = await fetchAPI<any>(API_CONFIG.POS_PAID_STATUSES_API_URL, {
+        params: {
+          environment: 'afi',
+        },
+      });
+
+      console.log('✅ POsPaidApiService - PO statuses loaded:', data);
+
+      // Transform API response to StatusOption format
+      if (Array.isArray(data)) {
+        return data.map((item: any) => ({
+          statusCode: item.statusCode || item.code,
+          statusDescription: item.statusDescription || item.description,
+          isActive: item.isActive !== false, // Default to true if not specified
+        }));
+      }
+
+      // Return mock data as fallback
+      console.warn('🔄 POsPaidApiService - Using fallback mock PO statuses');
+      return [
+        { statusCode: '10', statusDescription: 'Cfm Required', isActive: true },
+        { statusCode: '20', statusDescription: 'On-Order', isActive: true },
+        { statusCode: '30', statusDescription: 'In-Transit', isActive: true },
+        {
+          statusCode: '35',
+          statusDescription: 'Partial RcToStk',
+          isActive: true,
+        },
+        { statusCode: '40', statusDescription: 'Rc. to Stk.', isActive: true },
+        { statusCode: '50', statusDescription: 'Paid', isActive: true },
+      ];
+    } catch (error) {
+      console.error(
+        '❌ POsPaidApiService - Error fetching PO statuses:',
+        error,
+      );
+
+      // Return mock data as fallback
+      console.warn('🔄 POsPaidApiService - Using fallback mock PO statuses');
+      return [
+        { statusCode: '10', statusDescription: 'Cfm Required', isActive: true },
+        { statusCode: '20', statusDescription: 'On-Order', isActive: true },
+        { statusCode: '30', statusDescription: 'In-Transit', isActive: true },
+        {
+          statusCode: '35',
+          statusDescription: 'Partial RcToStk',
+          isActive: true,
+        },
+        { statusCode: '40', statusDescription: 'Rc. to Stk.', isActive: true },
+        { statusCode: '50', statusDescription: 'Paid', isActive: true },
+      ];
     }
   }
 }
@@ -1585,115 +1694,7 @@ class ProductionSchedApiService {
     }));
   }
 
-  // ============================================================================
-  // POs Paid API Methods
-  // ============================================================================
 
-  /**
-   * Search POs Paid data
-   * @param searchData Search criteria
-   * @returns Promise<POsPaidData[]>
-   */
-  static async searchPOsPaid(
-    searchData: POsPaidSearchFormData,
-  ): Promise<POsPaidData[]> {
-    try {
-      console.log(
-        '🔍 POsPaidApiService - Searching with criteria:',
-        searchData,
-      );
-
-      const request: POsPaidRequest = {
-        itemNumber: searchData.itemNumber,
-        warehouse: searchData.warehouse || '',
-        status: searchData.status || '',
-        vendor: searchData.vendor || '',
-        dateField: Number.parseInt(searchData.dateField || '-1'),
-        dateFrom: searchData.dateFrom || '',
-        dateTo: searchData.dateTo || '',
-        orderBy: 1, // Default sort order
-        vhsName: 'MASTERYY', // Default VHS name
-        user: 'system', // Default user
-        app: 'POsPaidInq.asp', // Application name
-      };
-
-      const response = await fetchAPI<POsPaidResponse>(
-        API_CONFIG.POS_PAID_API_URL('afi'),
-        {
-          method: 'POST',
-          data: request,
-        },
-      );
-
-      console.log('✅ POsPaidApiService - Search successful:', response);
-      return response.data || [];
-    } catch (error) {
-      console.error('❌ POsPaidApiService - Search failed:', error);
-      throw new Error('Failed to search POs Paid data');
-    }
-  }
-
-  /**
-   * Get PO statuses for POs Paid inquiry
-   * @returns Promise<StatusOption[]>
-   */
-  static async getPOStatuses(): Promise<StatusOption[]> {
-    try {
-      console.log('🔍 POsPaidApiService - Fetching PO statuses...');
-
-      const data = await fetchAPI<any>(API_CONFIG.POS_PAID_STATUSES_API_URL, {
-        params: {
-          environment: 'afi',
-        },
-      });
-
-      console.log('✅ POsPaidApiService - PO statuses loaded:', data);
-
-      // Transform API response to StatusOption format
-      if (Array.isArray(data)) {
-        return data.map((item: any) => ({
-          statusCode: item.statusCode || item.code,
-          statusDescription: item.statusDescription || item.description,
-          isActive: item.isActive !== false, // Default to true if not specified
-        }));
-      }
-
-      // Return mock data as fallback
-      console.warn('🔄 POsPaidApiService - Using fallback mock PO statuses');
-      return [
-        { statusCode: '10', statusDescription: 'Cfm Required', isActive: true },
-        { statusCode: '20', statusDescription: 'On-Order', isActive: true },
-        { statusCode: '30', statusDescription: 'In-Transit', isActive: true },
-        {
-          statusCode: '35',
-          statusDescription: 'Partial RcToStk',
-          isActive: true,
-        },
-        { statusCode: '40', statusDescription: 'Rc. to Stk.', isActive: true },
-        { statusCode: '50', statusDescription: 'Paid', isActive: true },
-      ];
-    } catch (error) {
-      console.error(
-        '❌ POsPaidApiService - Error fetching PO statuses:',
-        error,
-      );
-
-      // Return mock data as fallback
-      console.warn('🔄 POsPaidApiService - Using fallback mock PO statuses');
-      return [
-        { statusCode: '10', statusDescription: 'Cfm Required', isActive: true },
-        { statusCode: '20', statusDescription: 'On-Order', isActive: true },
-        { statusCode: '30', statusDescription: 'In-Transit', isActive: true },
-        {
-          statusCode: '35',
-          statusDescription: 'Partial RcToStk',
-          isActive: true,
-        },
-        { statusCode: '40', statusDescription: 'Rc. to Stk.', isActive: true },
-        { statusCode: '50', statusDescription: 'Paid', isActive: true },
-      ];
-    }
-  }
 }
 
 // Debug function to test specific API endpoints and understand response structure

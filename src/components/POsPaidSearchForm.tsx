@@ -82,8 +82,8 @@ const POsPaidSearchForm: React.FC<POsPaidSearchFormProps> = ({
         status: values.status || '',
         vendor: values.vendor || '',
         dateField: values.dateField || '-1',
-        dateFrom,
-        dateTo,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
         reportType: values.reportType || 'browser',
       };
 

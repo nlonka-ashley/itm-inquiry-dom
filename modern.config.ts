@@ -106,7 +106,7 @@ module.exports = defineConfig({
           },
         } as any,
         // POs Paid API - Purchase Order Domain Gateway
-        '/api/POsPaid': {
+        '/api/po-paid-inquiry': {
           target:
             'https://ashley-supplier-purchase-order-rest-domain-gateway.aks.eastus.azure.dev.a1p-apps.p6m.run',
           changeOrigin: true,

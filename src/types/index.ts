@@ -353,14 +353,13 @@ export interface DateFieldOption {
 }
 
 export interface POsPaidRequest {
-  itemNumber: string;
+  itemNum: string;
   warehouse: string;
   status: string;
   vendor: string;
   dateField: number;
-  dateFrom: string;
-  dateTo: string;
-  orderBy: number;
+  fromDate: string;
+  toDate: string;
   vhsName: string;
   user: string;
   app: string;
