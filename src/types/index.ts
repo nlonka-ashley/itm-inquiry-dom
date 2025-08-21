@@ -15,6 +15,12 @@ export interface FilterValue {
   filterDesc: string;
 }
 
+// Simple dropdown option interface
+export interface DropdownOption {
+  value: string;
+  label: string;
+}
+
 export interface SearchFormData {
   itemNumber: string;
   dueDateFrom?: string;
@@ -372,4 +378,119 @@ export interface POsPaidResponse {
   totalCount: number;
   timestamp: string;
   requestId: string;
+}
+
+// ============================================================================
+// PO Custom Inquiry Types
+// ============================================================================
+
+export interface POCustomInquiryProps {
+  companyCode?: string;
+}
+
+// Date field options for PO Custom Inquiry (uses existing DateFieldOption interface)
+
+// PO Custom Inquiry search form data
+export interface POCustomInquirySearchFormData {
+  item: string;
+  warehouses: string[];
+  carriers: string[];
+  shipMethod: string;
+  status: string;
+  vendor: string;
+  vessel: string;
+  voyage: string;
+  portOfEntry: string[];
+  dateField: number;
+  dateFrom: string;
+  dateTo: string;
+  reportType: 'browser' | 'excel' | 'email';
+}
+
+// PO Custom Inquiry result data structure
+export interface POCustomInquiryData {
+  poNumber: string;
+  itemNumber: string;
+  description: string;
+  vendor: string;
+  warehouse: string;
+  carrier: string;
+  shipMethod: string;
+  status: string;
+  vessel: string;
+  voyage: string;
+  portOfEntry: string;
+  etd: string;
+  eta: string;
+  receiptToStock: string;
+  receiver: string;
+  releaseDate: string;
+  originalDocsReceived: string;
+  delivered: string;
+  expectedDeliveryDate: string;
+  orderQty: number;
+  receivedQty: number;
+  balanceQty: number;
+  unitCost: number;
+  extendedCost: number;
+  eInvoiceStatus: string;
+  // Additional customizable columns
+  [key: string]: any;
+}
+
+// Filter options for dropdowns (using existing WarehouseInfo interface)
+
+export interface CarrierInfo {
+  carID: string;
+  carName: string;
+}
+
+export interface ShipMethodInfo {
+  shipMethod: string;
+  description: string;
+}
+
+export interface StatusInfo {
+  statusCode: string;
+  statusDescription: string;
+}
+
+// Using existing VendorInfo interface
+
+export interface VesselInfo {
+  vesselName: string;
+}
+
+export interface VoyageInfo {
+  voyageNumber: string;
+}
+
+export interface PortOfEntryInfo {
+  portCode: string;
+  portName: string;
+}
+
+// API request/response types for PO Custom Inquiry
+export interface POCustomInquiryRequest {
+  vhsName: string;
+  item: string;
+  warehouses: string;
+  carriers: string;
+  shipMethod: string;
+  status: string;
+  vendor: string;
+  vessel: string;
+  voyage: string;
+  portOfEntry: string;
+  dateField: number;
+  dateFrom: string;
+  dateTo: string;
+  userId: string;
+  application: string;
+}
+
+export interface POCustomInquiryResponse {
+  data: POCustomInquiryData[];
+  totalRecords: number;
+  criteria: string;
 }

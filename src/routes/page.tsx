@@ -212,6 +212,58 @@ const Index = () => (
                 </Space>
               </Card>
             </Col>
+
+            {/* PO Custom Inquiry Card */}
+            <Col xs={24} sm={12} lg={8}>
+              <Card
+                hoverable
+                style={{ height: '100%', textAlign: 'center' }}
+                bodyStyle={{ padding: '40px 24px' }}
+              >
+                <ShoppingCartOutlined
+                  style={{
+                    fontSize: '48px',
+                    color: '#722ed1',
+                    marginBottom: '24px',
+                  }}
+                />
+                <Title level={3} style={{ marginBottom: '16px' }}>
+                  PO Customizable Inquiry
+                </Title>
+                <Paragraph
+                  style={{
+                    color: '#666',
+                    marginBottom: '24px',
+                    minHeight: '60px',
+                  }}
+                >
+                  Advanced purchase order inquiry with customizable filters,
+                  multi-select options, vessel tracking, and flexible column display.
+                </Paragraph>
+                <Space
+                  direction="vertical"
+                  size="middle"
+                  style={{ width: '100%' }}
+                >
+                  <Link to="/po-custom-inquiry">
+                    <Button
+                      type="primary"
+                      size="large"
+                      block
+                      style={{
+                        backgroundColor: '#722ed1',
+                        borderColor: '#722ed1',
+                      }}
+                    >
+                      Open PO Custom Inquiry
+                    </Button>
+                  </Link>
+                  <Paragraph style={{ fontSize: '12px', color: '#999' }}>
+                    Migrated from POCustomInquiry.asp
+                  </Paragraph>
+                </Space>
+              </Card>
+            </Col>
           </Row>
 
           <div

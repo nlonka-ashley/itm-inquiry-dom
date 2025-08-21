@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import type {
+  POCustomInquiryData,
+  POCustomInquirySearchFormData,
   POItemData,
   POsPaidData,
   ProductionSchedData,
@@ -552,6 +554,137 @@ export class ExcelExportService {
         error,
       );
       throw new Error('Failed to export POs Paid data to Excel');
+    }
+  }
+
+  /**
+   * Export PO Custom Inquiry data to Excel file
+   * @param data Array of PO Custom Inquiry data
+   * @param searchCriteria Search criteria used for the query
+   * @param filename Optional filename (defaults to generated name with timestamp)
+   */
+  static exportPOCustomInquiry(
+    data: POCustomInquiryData[],
+    searchCriteria: Partial<POCustomInquirySearchFormData>,
+    filename?: string,
+  ): void {
+    try {
+      console.log('📊 ExcelExportService - Exporting PO Custom Inquiry data...');
+
+      // Prepare data for Excel export
+      const excelData = data.map((item, index) => ({
+        'Row #': index + 1,
+        'PO Number': item.poNumber || '',
+        'Item Number': item.itemNumber || '',
+        'Description': item.description || '',
+        'Vendor': item.vendor || '',
+        'Warehouse': item.warehouse || '',
+        'Carrier': item.carrier || '',
+        'Ship Method': item.shipMethod || '',
+        'Status': item.status || '',
+        'Vessel': item.vessel || '',
+        'Voyage': item.voyage || '',
+        'Port of Entry': item.portOfEntry || '',
+        'ETD': item.etd ? dayjs(item.etd).format('MM/DD/YYYY') : '',
+        'ETA': item.eta ? dayjs(item.eta).format('MM/DD/YYYY') : '',
+        'Receipt to Stock': item.receiptToStock ? dayjs(item.receiptToStock).format('MM/DD/YYYY') : '',
+        'Receiver': item.receiver ? dayjs(item.receiver).format('MM/DD/YYYY') : '',
+        'Release Date': item.releaseDate ? dayjs(item.releaseDate).format('MM/DD/YYYY') : '',
+        'Original Docs Received': item.originalDocsReceived ? dayjs(item.originalDocsReceived).format('MM/DD/YYYY') : '',
+        'Delivered': item.delivered ? dayjs(item.delivered).format('MM/DD/YYYY') : '',
+        'Expected Delivery Date': item.expectedDeliveryDate ? dayjs(item.expectedDeliveryDate).format('MM/DD/YYYY') : '',
+        'Order Qty': item.orderQty || 0,
+        'Received Qty': item.receivedQty || 0,
+        'Balance Qty': item.balanceQty || 0,
+        'Unit Cost': item.unitCost || 0,
+        'Extended Cost': item.extendedCost || 0,
+        'E-Invoice Status': item.eInvoiceStatus || '',
+      }));
+
+      // Create workbook and worksheet
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+      // Set column widths for better readability
+      const columnWidths = [
+        { wch: 8 },   // Row #
+        { wch: 12 },  // PO Number
+        { wch: 15 },  // Item Number
+        { wch: 30 },  // Description
+        { wch: 25 },  // Vendor
+        { wch: 20 },  // Warehouse
+        { wch: 20 },  // Carrier
+        { wch: 12 },  // Ship Method
+        { wch: 15 },  // Status
+        { wch: 15 },  // Vessel
+        { wch: 12 },  // Voyage
+        { wch: 20 },  // Port of Entry
+        { wch: 12 },  // ETD
+        { wch: 12 },  // ETA
+        { wch: 15 },  // Receipt to Stock
+        { wch: 12 },  // Receiver
+        { wch: 15 },  // Release Date
+        { wch: 20 },  // Original Docs Received
+        { wch: 12 },  // Delivered
+        { wch: 20 },  // Expected Delivery Date
+        { wch: 12 },  // Order Qty
+        { wch: 12 },  // Received Qty
+        { wch: 12 },  // Balance Qty
+        { wch: 12 },  // Unit Cost
+        { wch: 15 },  // Extended Cost
+        { wch: 15 },  // E-Invoice Status
+      ];
+      worksheet['!cols'] = columnWidths;
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'PO Custom Inquiry');
+
+      // Create search criteria summary sheet
+      const criteriaData = [
+        { Field: 'Item', Value: searchCriteria.item || 'All' },
+        { Field: 'Warehouses', Value: searchCriteria.warehouses?.join(', ') || 'All' },
+        { Field: 'Carriers', Value: searchCriteria.carriers?.join(', ') || 'All' },
+        { Field: 'Ship Method', Value: searchCriteria.shipMethod || 'All' },
+        { Field: 'Status', Value: searchCriteria.status || 'All' },
+        { Field: 'Vendor', Value: searchCriteria.vendor || 'All' },
+        { Field: 'Vessel', Value: searchCriteria.vessel || 'All' },
+        { Field: 'Voyage', Value: searchCriteria.voyage || 'All' },
+        { Field: 'Port of Entry', Value: searchCriteria.portOfEntry?.join(', ') || 'All' },
+        { Field: 'Date Field', Value: searchCriteria.dateField?.toString() || 'All Dates' },
+        { Field: 'Date From', Value: searchCriteria.dateFrom || 'N/A' },
+        { Field: 'Date To', Value: searchCriteria.dateTo || 'N/A' },
+        { Field: 'Export Date', Value: dayjs().format('MM/DD/YYYY HH:mm:ss') },
+        { Field: 'Total Records', Value: data.length.toString() },
+      ];
+
+      const criteriaWorksheet = XLSX.utils.json_to_sheet(criteriaData);
+      criteriaWorksheet['!cols'] = [{ wch: 20 }, { wch: 40 }];
+      XLSX.utils.book_append_sheet(workbook, criteriaWorksheet, 'Search Criteria');
+
+      // Generate filename if not provided
+      const defaultFilename = `PO_Custom_Inquiry_${dayjs().format('YYYYMMDD_HHmmss')}.xlsx`;
+      const exportFilename = filename || defaultFilename;
+
+      // Export the file
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+      const blob = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+
+      saveAs(blob, exportFilename);
+
+      console.log(
+        `✅ ExcelExportService - PO Custom Inquiry data exported successfully: ${exportFilename}`,
+      );
+    } catch (error) {
+      console.error(
+        '❌ ExcelExportService - Error exporting PO Custom Inquiry data:',
+        error,
+      );
+      throw new Error('Failed to export PO Custom Inquiry data to Excel');
     }
   }
 }

@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import type {
   BuyerInfo,
   DRPInfo,
+  DropdownOption,
   FCInfo,
   FilterField,
   FilterValue,
@@ -52,6 +53,14 @@ const API_CONFIG = {
   // POs Paid API URLs
   POS_PAID_API_URL: (env: string) => `/api/po-paid-inquiry/${env}/search`,
   POS_PAID_STATUSES_API_URL: '/api/v1/inquiry-common/po-statuses',
+
+  // PO Custom Inquiry API URLs
+  PO_CUSTOM_INQUIRY_API_URL: (env: string) => `/api/po-custom-inquiry/${env}/search`,
+  CARRIERS_API_URL: '/api/v1/inquiry-common/carriers',
+  SHIP_METHODS_API_URL: '/api/v1/inquiry-common/ship-methods',
+  VESSELS_API_URL: '/api/v1/inquiry-common/vessels',
+  VOYAGES_API_URL: (vessel: string) => `/api/v1/inquiry-common/voyages/${vessel}`,
+  PORT_OF_ENTRY_API_URL: '/api/v1/inquiry-common/port-of-entry',
 };
 
 // Configure Axios defaults
@@ -1802,7 +1811,182 @@ export async function debugProductionScheduleAPIs(): Promise<void> {
   }
 }
 
+// PO Custom Inquiry API Service Class
+class POCustomInquiryApiService {
+  // Get filter values for PO Custom Inquiry dropdowns
+  async getFilterValues(filterType: string): Promise<DropdownOption[]> {
+    try {
+      console.log(`🔄 Getting PO Custom Inquiry filter values for: ${filterType}`);
+
+      let data: DropdownOption[] = [];
+
+      switch (filterType) {
+        case 'warehouses':
+          const warehouses = await fetchWarehouses();
+          data = warehouses.map(w => ({
+            value: w.whseCode,
+            label: `${w.whseCode} - ${w.whseDescription}`,
+          }));
+          break;
+
+        case 'carriers':
+          data = await this.fetchCarriers();
+          break;
+
+        case 'shipMethods':
+          data = await this.fetchShipMethods();
+          break;
+
+        case 'statuses':
+          data = await this.fetchStatuses();
+          break;
+
+        case 'vendors':
+          const vendors = await fetchVendors();
+          data = vendors.map(v => ({
+            value: v.vendorNumber,
+            label: `${v.vendorNumber} - ${v.vendorName}`,
+          }));
+          break;
+
+        case 'vessels':
+          data = await this.fetchVessels();
+          break;
+
+        case 'portOfEntry':
+          data = await this.fetchPortOfEntry();
+          break;
+
+        default:
+          console.warn(`⚠️ Unknown filter type: ${filterType}`);
+          data = [];
+      }
+
+      console.log(`✅ Retrieved ${data.length} ${filterType} options`);
+      return data;
+    } catch (error) {
+      console.error(`❌ Error fetching ${filterType}:`, error);
+      return [];
+    }
+  }
+
+  // Get voyages based on selected vessel
+  async getVoyages(vessel: string): Promise<DropdownOption[]> {
+    try {
+      console.log(`🔄 Getting voyages for vessel: ${vessel}`);
+
+      if (!vessel) {
+        return [{ value: '', label: '-All Voyages-' }];
+      }
+
+      const response = await fetchAPI<any>(API_CONFIG.VOYAGES_API_URL(vessel));
+
+      const voyages = Array.isArray(response) ? response : response?.data || [];
+      const data = voyages.map((voyage: any) => ({
+        value: voyage.voyageNumber || voyage.conMotherVoyage,
+        label: voyage.voyageNumber || voyage.conMotherVoyage,
+      }));
+
+      return [{ value: '', label: '-All Voyages-' }, ...data];
+    } catch (error) {
+      console.error('❌ Error fetching voyages:', error);
+      return [{ value: '', label: '-All Voyages-' }];
+    }
+  }
+
+  // Fetch carriers
+  private async fetchCarriers(): Promise<DropdownOption[]> {
+    try {
+      const response = await fetchAPI<any>(API_CONFIG.CARRIERS_API_URL);
+      const carriers = Array.isArray(response) ? response : response?.data || [];
+
+      const data = carriers.map((carrier: any) => ({
+        value: carrier.carID,
+        label: `${carrier.carID} - ${carrier.carName}`,
+      }));
+
+      return [{ value: '', label: '-All Carriers-' }, ...data];
+    } catch (error) {
+      console.error('❌ Error fetching carriers:', error);
+      return [{ value: '', label: '-All Carriers-' }];
+    }
+  }
+
+  // Fetch ship methods
+  private async fetchShipMethods(): Promise<DropdownOption[]> {
+    try {
+      const response = await fetchAPI<any>(API_CONFIG.SHIP_METHODS_API_URL);
+      const shipMethods = Array.isArray(response) ? response : response?.data || [];
+
+      const data = shipMethods.map((method: any) => ({
+        value: method.shipMethod,
+        label: method.description,
+      }));
+
+      return [{ value: '', label: 'All' }, ...data];
+    } catch (error) {
+      console.error('❌ Error fetching ship methods:', error);
+      return [{ value: '', label: 'All' }];
+    }
+  }
+
+  // Fetch statuses
+  private async fetchStatuses(): Promise<DropdownOption[]> {
+    try {
+      const response = await fetchAPI<any>(API_CONFIG.STATUSES_API_URL);
+      const statuses = Array.isArray(response) ? response : response?.data || [];
+
+      const data = statuses.map((status: any) => ({
+        value: status.statusCode,
+        label: status.statusDescription,
+      }));
+
+      return [{ value: '', label: '-All Statuses-' }, ...data];
+    } catch (error) {
+      console.error('❌ Error fetching statuses:', error);
+      return [{ value: '', label: '-All Statuses-' }];
+    }
+  }
+
+  // Fetch vessels
+  private async fetchVessels(): Promise<DropdownOption[]> {
+    try {
+      const response = await fetchAPI<any>(API_CONFIG.VESSELS_API_URL);
+      const vessels = Array.isArray(response) ? response : response?.data || [];
+
+      const data = vessels.map((vessel: any) => ({
+        value: vessel.vesselName || vessel.veaMotherVessel,
+        label: vessel.vesselName || vessel.veaMotherVessel,
+      }));
+
+      return [{ value: '', label: '-All Vessels-' }, ...data];
+    } catch (error) {
+      console.error('❌ Error fetching vessels:', error);
+      return [{ value: '', label: '-All Vessels-' }];
+    }
+  }
+
+  // Fetch port of entry
+  private async fetchPortOfEntry(): Promise<DropdownOption[]> {
+    try {
+      const response = await fetchAPI<any>(API_CONFIG.PORT_OF_ENTRY_API_URL);
+      const ports = Array.isArray(response) ? response : response?.data || [];
+
+      const data = ports.map((port: any) => ({
+        value: port.portCode,
+        label: `${port.portCode} - ${port.portName}`,
+      }));
+
+      return [{ value: '', label: '-All Port of Entry-' }, ...data];
+    } catch (error) {
+      console.error('❌ Error fetching port of entry:', error);
+      return [{ value: '', label: '-All Port of Entry-' }];
+    }
+  }
+}
+
 // Export default instance
 export const apiService = ApiService;
 export const productionSchedApiService = new ProductionSchedApiService();
 export const posPaidApiService = ApiService;
+export const poCustomInquiryApiService = new POCustomInquiryApiService();
